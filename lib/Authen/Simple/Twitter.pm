@@ -5,19 +5,21 @@ use strict;
 
 use base 'Authen::Simple::Adapter';
 
-__PACKAGE__->options({
+__PACKAGE__->options(
+    {
         identica => {
             type     => Params::Validate::BOOLEAN,
             default  => undef,
             optional => 1
         }
-    });
+    }
+);
 
 use Net::Twitter;
 
 =head1 NAME
 
-Authen::Simple::Twitter - The great new Authen::Simple::Twitter!
+Authen::Simple::Twitter - Simple authentication using Twitter or Identica
 
 =head1 VERSION
 
@@ -26,7 +28,6 @@ Version 0.01
 =cut
 
 our $VERSION = '0.01';
-
 
 =head1 SYNOPSIS
 
@@ -39,11 +40,6 @@ Perhaps a little code snippet.
     my $foo = Authen::Simple::Twitter->new();
     ...
 
-=head1 EXPORT
-
-A list of functions that can be exported.  You can delete this section
-if you don't export anything, such as for a purely object-oriented module.
-
 =head1 FUNCTIONS
 
 =head2 check
@@ -51,24 +47,30 @@ if you don't export anything, such as for a purely object-oriented module.
 =cut
 
 sub check {
-        my ( $self, $username, $password ) = @_;
+    my ( $self, $username, $password ) = @_;
 
-        my $twitter = Net::Twitter->new({username=>$username, password=>$password, identica => $self->identica});
-        
-        if ( my $response = $twitter->verify_credentials() ) {
-            
-            $self->log->debug( qq/Successfully authenticated user '$username'./ )
-              if $self->log;
-            
-            return $twitter;
+    my $twitter = Net::Twitter->new(
+        {
+            username => $username,
+            password => $password,
+            identica => $self->identica
         }
-        
-        $self->log->debug( qq/Failed to authenticate user '$username'. Reason: 'Invalid credentials'/ )
+    );
+
+    if ( my $response = $twitter->verify_credentials() ) {
+
+        $self->log->debug(qq/Successfully authenticated user '$username'./)
           if $self->log;
-        
-        return 0;
+
+        return 1;
     }
 
+    $self->log->debug(
+qq/Failed to authenticate user '$username'. Reason: 'Invalid credentials'/
+    ) if $self->log;
+
+    return 0;
+}
 
 =head1 AUTHOR
 
@@ -79,9 +81,6 @@ Dan Moore, C<< <dan at moore.cx> >>
 Please report any bugs or feature requests to C<bug-authen-simple-twitter at rt.cpan.org>, or through
 the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Authen-Simple-Twitter>.  I will be notified, and then you'll
 automatically be notified of progress on your bug as I make changes.
-
-
-
 
 =head1 SUPPORT
 
@@ -115,6 +114,7 @@ L<http://search.cpan.org/dist/Authen-Simple-Twitter/>
 
 =head1 ACKNOWLEDGEMENTS
 
+This module is pretty close to 1 line of code.  All the real functionality is in L<Net::Twitter> and L<Authen::Simple>.
 
 =head1 COPYRIGHT & LICENSE
 
@@ -126,4 +126,4 @@ under the same terms as Perl itself.
 
 =cut
 
-1; # End of Authen::Simple::Twitter
+1;    # End of Authen::Simple::Twitter
