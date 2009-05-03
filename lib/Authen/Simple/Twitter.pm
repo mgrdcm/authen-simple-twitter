@@ -15,6 +15,8 @@ __PACKAGE__->options(
     }
 );
 
+__PACKAGE__->mk_accessors(qw[ net_twitter ]);
+
 use Net::Twitter;
 
 =head1 NAME
@@ -31,16 +33,16 @@ our $VERSION = '0.01';
 
 =head1 SYNOPSIS
 
-Quick summary of what the module does.
-
-Perhaps a little code snippet.
-
     use Authen::Simple::Twitter;
 
-    my $foo = Authen::Simple::Twitter->new();
-    ...
+    my $twitauth = Authen::Simple::Twitter->new();
+
+    if ( $dbi->authenticate( $username, $password ) ) {
+        # successful authentication
+    }
 
 =head1 FUNCTIONS
+
 
 =head2 check
 
@@ -49,15 +51,13 @@ Perhaps a little code snippet.
 sub check {
     my ( $self, $username, $password ) = @_;
 
-    my $twitter = Net::Twitter->new(
-        {
-            username => $username,
-            password => $password,
-            identica => $self->identica
-        }
+    $self->net_twitter->credentials(
+        $username, $password,
+        $self->net_twitter->{apihost},
+        $self->net_twitter->{apirealm}
     );
 
-    if ( my $response = $twitter->verify_credentials() ) {
+    if ( my $response = $self->net_twitter->verify_credentials() ) {
 
         $self->log->debug(qq/Successfully authenticated user '$username'./)
           if $self->log;
@@ -70,6 +70,21 @@ qq/Failed to authenticate user '$username'. Reason: 'Invalid credentials'/
     ) if $self->log;
 
     return 0;
+}
+
+
+=head2 init
+
+=cut
+
+sub init {
+    my ( $self, $parameters ) = @_;
+
+    my $initret = $self->SUPER::init($parameters);
+
+    $self->net_twitter( Net::Twitter->new( { identica => $self->identica } ) );
+
+    return $initret;
 }
 
 =head1 AUTHOR
