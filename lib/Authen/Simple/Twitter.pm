@@ -3,6 +3,18 @@ package Authen::Simple::Twitter;
 use warnings;
 use strict;
 
+use base 'Authen::Simple::Adapter';
+
+__PACKAGE__->options({
+        identica => {
+            type     => Params::Validate::BOOLEAN,
+            default  => undef,
+            optional => 1
+        }
+    });
+
+use Net::Twitter;
+
 =head1 NAME
 
 Authen::Simple::Twitter - The great new Authen::Simple::Twitter!
@@ -34,19 +46,29 @@ if you don't export anything, such as for a purely object-oriented module.
 
 =head1 FUNCTIONS
 
-=head2 function1
+=head2 check
 
 =cut
 
-sub function1 {
-}
+sub check {
+        my ( $self, $username, $password ) = @_;
 
-=head2 function2
+        my $twitter = Net::Twitter->new({username=>$username, password=>$password, identica => $self->identica});
+        
+        if ( my $response = $twitter->verify_credentials() ) {
+            
+            $self->log->debug( qq/Successfully authenticated user '$username'./ )
+              if $self->log;
+            
+            return $twitter;
+        }
+        
+        $self->log->debug( qq/Failed to authenticate user '$username'. Reason: 'Invalid credentials'/ )
+          if $self->log;
+        
+        return 0;
+    }
 
-=cut
-
-sub function2 {
-}
 
 =head1 AUTHOR
 
