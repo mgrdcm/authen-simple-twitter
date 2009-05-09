@@ -9,7 +9,9 @@ my $builder = Module::Build->new(
     dist_version_from   => 'lib/Authen/Simple/Twitter.pm',
     build_requires => {
         'Test::More' => 0,
-        'Authen::Simple' => 0.3,
+    },
+    requires => {
+        'Authen::Simple::Adapter' => 0,
         'Net::Twitter' => 2.12,
     },
     add_to_cleanup      => [ 'Authen-Simple-Twitter-*' ],

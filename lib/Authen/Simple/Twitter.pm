@@ -72,7 +72,6 @@ qq/Failed to authenticate user '$username'. Reason: 'Invalid credentials'/
     return 0;
 }
 
-
 =head2 init
 
 =cut
