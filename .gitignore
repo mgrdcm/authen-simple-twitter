@@ -6,6 +6,10 @@ _build*
 pm_to_blib*
 *.tar.gz
 .lwpcookies
-Authen-Simple-Twitter-*
+Net-Server-Mail-ESMTP-STARTTLS-*
 cover_db
+
 pod2htm?.tmp
+MANIFEST.bak
+META.yml
+Makefile.PL
