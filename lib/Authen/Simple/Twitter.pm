@@ -104,7 +104,17 @@ sub init {
 
     my $initret = $self->SUPER::init($parameters);
 
-    $self->net_twitter( Net::Twitter->new( { identica => $self->identica } ) );
+    $self->net_twitter(
+        Net::Twitter->new(
+            {
+                identica => $self->identica,
+
+                clientname => 'Authen::Simple::Twitter',
+                clientver  => $VERSION,
+                clienturl  => 'http://github.com/mgrdcm/authen-simple-twitter'
+            }
+        )
+    );
 
     return $initret;
 }
