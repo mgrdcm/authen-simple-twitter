@@ -21,7 +21,7 @@ use Net::Twitter;
 
 =head1 NAME
 
-Authen::Simple::Twitter - Simple authentication using Twitter or Identica
+Authen::Simple::Twitter - Simple authentication using Twitter or Identi.ca
 
 =head1 VERSION
 
@@ -35,16 +35,44 @@ our $VERSION = '0.01';
 
     use Authen::Simple::Twitter;
 
+
+    # authenticate against Twitter
     my $twitauth = Authen::Simple::Twitter->new();
 
-    if ( $dbi->authenticate( $username, $password ) ) {
-        # successful authentication
+    if ( $twitauth->authenticate( $username, $password ) ) {
+        # successful Twitter authentication
+    }
+
+
+    # authenticate against Identi.ca
+    my $dentauth = Authen::Simple::Twitter->new(identica => 1);
+
+    if ( $dentauth->authenticate( $username, $password ) ) {
+        # successful Identi.ca authentication
     }
 
 =head1 FUNCTIONS
 
+=head2 new
 
-=head2 check
+This method takes a hash of parameters. The following options are valid
+particularly for this module:
+
+=over
+
+=item * identica
+
+A boolean indicating whether or not to authenticate to Identi.ca instead
+of Twitter.
+
+=back
+
+See L<Authen::Simple> for other common parameters which are also valid.
+
+
+=head2 authenticate( $username, $password )
+
+Returns true on success and false on failure.
 
 =cut
 
@@ -65,16 +93,11 @@ sub check {
         return 1;
     }
 
-    $self->log->debug(
-qq/Failed to authenticate user '$username'. Reason: 'Invalid credentials'/
-    ) if $self->log;
+    $self->log->debug(qq/Failed to authenticate user '$username'./)
+      if $self->log;
 
     return 0;
 }
-
-=head2 init
-
-=cut
 
 sub init {
     my ( $self, $parameters ) = @_;
@@ -106,6 +129,10 @@ You can find documentation for this module with the perldoc command.
 You can also look for information at:
 
 =over 4
+
+=item * Net::Authen::Twitter's github page
+
+L<http://github.com/mgrdcm/authen-simple-twitter>
 
 =item * RT: CPAN's request tracker
 
