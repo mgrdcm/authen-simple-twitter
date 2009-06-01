@@ -12,7 +12,7 @@ my $builder = Module::Build->new(
     },
     requires => {
         'Authen::Simple::Adapter' => 0,
-        'Net::Twitter' => 2.12,
+        'Net::Twitter' => 0,
     },
     add_to_cleanup      => [ 'Authen-Simple-Twitter-*' ],
     create_makefile_pl => 'traditional',
