@@ -14,8 +14,13 @@ my $builder = Module::Build->new(
         'Authen::Simple::Adapter' => 0,
         'Net::Twitter' => 0,
     },
-    add_to_cleanup      => [ 'Authen-Simple-Twitter-*' ],
+    add_to_cleanup     => [ 'Authen-Simple-Twitter-*' ],
     create_makefile_pl => 'traditional',
+    meta_add => {
+        resources => {
+            repository => 'git://github.com/mgrdcm/authen-simple-twitter.git',
+        },
+    },
 );
 
 $builder->create_build_script();

@@ -1,5 +1,7 @@
 Revision history for Authen-Simple-Twitter
 
-0.01    Date/time
+0.01    2009-06-02
         First version, released on an unsuspecting world.
 
+0.02    2009-??-??
+        Little cleanups, and adding respository to META.yml.
